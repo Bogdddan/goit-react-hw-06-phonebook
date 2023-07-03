@@ -1,69 +1,59 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  addContact,
-  deleteContact,
-  updateFilter,
-  selectContacts,
-  selectFilter,
-} from './contactSlice';
+import React from 'react';
+
+import { ContactForm } from './ContactForm/contactForm';
 import { Filter } from './Filter/Filter';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFilter } from 'redux/filterSlice';
+import { addedContact, deletedContact } from 'redux/contactsSlice';
+import { getСontacts, getFilter } from 'redux/selectors';
 import { ContactList } from './ContactList/ContactList';
-import { Form } from './Form/Form';
 
-export const App = () => {
+export function App() {
   const dispatch = useDispatch();
-  const contacts = useSelector(selectContacts);
-  const filter = useSelector(selectFilter);
+  const contacts = useSelector(getСontacts);
+  const filter = useSelector(getFilter);
 
-  useEffect(() => {
-    const storedContacts = localStorage.getItem('contacts');
-    if (storedContacts) {
-      dispatch(addContact(JSON.parse(storedContacts)));
-    }
-  }, [dispatch]);
+  const deleteContact = contactId => {
+    dispatch(deletedContact(contactId));
+  };
 
-  useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
-
-  const handleSubmitForm = (name, number) => {
-    const isDuplicateName = contacts.some(
-      (contact) => contact.name.toLowerCase() === name.toLowerCase()
-    );
-
-    if (isDuplicateName) {
-      alert("Контакт з таким ім'ям вже існує!");
+  const addContact = (name, number) => {
+    if (
+      contacts.find(
+        contact => contact.name.toLowerCase() === name.toLowerCase()
+      )
+    ) {
+      alert(`${name} is already in contacts`);
       return;
     }
 
-    dispatch(addContact({ id: Date.now(), name, number }));
+    dispatch(addedContact(name, number));
   };
 
-  const handleDelete = (id) => {
-    dispatch(deleteContact(id));
-  };
+  const changeFilter = event => dispatch(setFilter(event.currentTarget.value));
 
-  const changeFilter = (e) => {
-    dispatch(updateFilter(e.currentTarget.value));
-  };
-
-  const filterContacts = () => {
-    return contacts.filter((contact) =>
-      contact.name.toLowerCase().includes(filter.toLowerCase())
+  const getFiltredContacts = () => {
+    const normalizedFilter = filter.toLowerCase();
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(normalizedFilter)
     );
   };
+  const filtredContacts = getFiltredContacts();
 
   return (
-    <div className="container">
-      <Form handleSubmitForm={handleSubmitForm} />
+    <>
+      <h1>Phonebook</h1>
+      <ContactForm onSubmit={addContact} />
+
+      <h2>Contacts</h2>
       <Filter value={filter} onChange={changeFilter} />
-      <ContactList filterContacts={filterContacts()} handleDelete={handleDelete} />
-    </div>
+      <ContactList
+        filtredContacts={filtredContacts}
+        onDeleteContact={deleteContact}
+      />
+    </>
   );
-};
-
-
+}
 
 // work code
 

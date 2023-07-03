@@ -1,20 +1,10 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { updateFilter, selectFilter } from '../contactSlice';
-// import css from './Filter.module.css';
 
-export const Filter = () => {
-  const dispatch = useDispatch();
-  const filter = useSelector(selectFilter);
-
-  const handleFilterChange = (event) => {
-    dispatch(updateFilter(event.currentTarget.value));
-  };
-
+export const Filter = ({ value , onChange }) => {
   return (
     <div>
       <p>Find contacts by name</p>
-      <input type="text" value={filter} onChange={handleFilterChange} />
+      <input type="text" value={value} onChange={onChange} />
     </div>
   );
 };
