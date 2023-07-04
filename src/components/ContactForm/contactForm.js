@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import css from './ContactForm.module.css';
+
 export function ContactForm({ onSubmit }) {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
@@ -28,7 +30,7 @@ export function ContactForm({ onSubmit }) {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={css.form}>
         <label htmlFor="inputName">Name</label>
         <input
           type="text"

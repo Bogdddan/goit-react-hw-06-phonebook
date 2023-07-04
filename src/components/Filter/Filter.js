@@ -1,9 +1,10 @@
 import React from 'react';
+import css from './Filter.module.css';
 
 export const Filter = ({ value , onChange }) => {
   return (
-    <div>
-      <p>Find contacts by name</p>
+    <div className={css.FindContacts}>
+      <p >Find contacts by name</p>
       <input type="text" value={value} onChange={onChange} />
     </div>
   );

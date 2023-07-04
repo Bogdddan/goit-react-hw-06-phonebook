@@ -8,6 +8,8 @@ import { addedContact, deletedContact } from 'redux/contactsSlice';
 import { getСontacts, getFilter } from 'redux/selectors';
 import { ContactList } from './ContactList/ContactList';
 
+import css from './App.module.css';
+
 export function App() {
   const dispatch = useDispatch();
   const contacts = useSelector(getСontacts);
@@ -41,17 +43,17 @@ export function App() {
   const filtredContacts = getFiltredContacts();
 
   return (
-    <>
-      <h1>Phonebook</h1>
+    <div className={css.container}>
+      <h1 className={css.name}>Phonebook</h1>
       <ContactForm onSubmit={addContact} />
 
-      <h2>Contacts</h2>
+      <h2 className={css.secondName}>Contacts</h2>
       <Filter value={filter} onChange={changeFilter} />
       <ContactList
         filtredContacts={filtredContacts}
         onDeleteContact={deleteContact}
       />
-    </>
+    </div>
   );
 }
 
